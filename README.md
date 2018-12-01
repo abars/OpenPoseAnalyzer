@@ -1,8 +1,5 @@
 # Analyze OpenPose Output
 
-<img src="https://github.com/abars/OpenPoseAnalyzer/blob/master/images/dress.jpg" width="50%" height="50%">
-(image from wider face dataset)
-
 # Overview
 
 ## Requirements
@@ -27,17 +24,18 @@ Python 2.7
 
 ## OpenPose Output
 
-*PAF - output[0] - (1, 38, 46, 46)
+* PAF - output[0] - (1, 38, 46, 46)
 
 <img src="https://github.com/abars/OpenPoseAnalyzer/blob/master/images/paf.png" width="50%" height="50%">
 
-*CONFIDENCE - output[1] - (1, 19, 46, 46)
+* CONFIDENCE - output[1] - (1, 19, 46, 46)
 
 <img src="https://github.com/abars/OpenPoseAnalyzer/blob/master/images/confidence.png" width="50%" height="50%">
 
 ## COCO KeyPoint
 
 <img src="https://github.com/abars/OpenPoseAnalyzer/blob/master/images/keypoint.png" width="50%" height="50%">
+(image from wider face dataset)
 
 * Nose – 0
 * Neck – 1
