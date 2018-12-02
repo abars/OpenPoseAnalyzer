@@ -17,9 +17,14 @@ import pandas as pd
 IMAGE_PATH="images/dress.jpg"
 CAFFE_MODEL='pose_iter_440000.caffemodel'
 PROTOTXT='pose_deploy.prototxt'
-
 IMAGE_WIDTH=368
 IMAGE_HEIGHT=368
+
+if len(sys.argv) >= 5:
+  CAFFE_MODEL = sys.argv[1]
+  PROTOTXT = sys.argv[2]
+  IMAGE_WIDTH = int(sys.argv[3])
+  IMAGE_HEIGHT = int(sys.argv[4])
 
 if not os.path.exists(IMAGE_PATH):
 	print(IMAGE_PATH+" not found")
@@ -28,7 +33,7 @@ if not os.path.exists(IMAGE_PATH):
 print IMAGE_PATH
 input_img = cv2.imread(IMAGE_PATH)
 
-img = cv2.resize(input_img, (IMAGE_HEIGHT, IMAGE_WIDTH))
+img = cv2.resize(input_img, (IMAGE_WIDTH, IMAGE_HEIGHT))
 
 img = img[...,::-1]  #BGR 2 RGB
 
@@ -41,8 +46,14 @@ net  = caffe.Net(PROTOTXT, CAFFE_MODEL, caffe.TEST)
 data = data.transpose((0, 3, 1, 2))
 out = net.forward_all(data = data)
 
-paf = out[net.outputs[0]]
-confidence = out[net.outputs[1]]
+print("OUTPUT COUNT : "+str(len(net.outputs)))
+
+if len(net.outputs)>=2:
+  paf = out[net.outputs[0]]
+  confidence = out[net.outputs[1]]
+else:
+  confidence = out[net.outputs[0]][:,0:19,:,:]
+  paf = out[net.outputs[0]][:,19:,:,:]
 
 print("PAF SHAPE : "+str(paf.shape))
 print("CONFIDENCE SHAPE : "+str(confidence.shape))
@@ -86,7 +97,7 @@ def plot_images(title, images, tile_shape):
 		grd = grid[i]
 		grd.imshow(images[0,i])
 
-channels=38
+channels=max(confidence.shape[1],paf.shape[1])
 cols=8
 
 plot_images("paf",paf,tile_shape=((channels+cols-1)/cols,cols))
